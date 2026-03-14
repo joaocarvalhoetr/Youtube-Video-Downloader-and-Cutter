@@ -1,0 +1,31 @@
+{
+    "name": "Youtube Video Downloader and Cutter",
+    "description": "Download and cut youtube videos to send them to your friends!",
+    "version": "1.0",
+    "manifest_version": 3,
+    "permissions": ["activeTab", "downloads"],
+    "host_permissions": ["http://127.0.0.1:48721/*"],
+    "icons": {
+      "16": "icon.png",
+      "32": "icon.png",
+      "48": "icon.png",
+      "128": "icon.png"
+    },
+    "action": {
+      "default_popup": "hello.html",
+      "default_icon": {
+        "16": "icon.png",
+        "32": "icon.png",
+        "48": "icon.png",
+        "128": "icon.png"
+      }
+    },
+    "content_scripts": [
+      {
+        "js": ["scripts/content.js"],
+        "matches": [
+          "https://www.youtube.com/watch*"
+        ]
+      }
+    ]
+}

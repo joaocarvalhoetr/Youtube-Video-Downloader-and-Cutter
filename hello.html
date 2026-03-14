@@ -1,0 +1,86 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="./tailwind.js"></script>
+        <title>Youtube Video Downloader and Cutter</title>
+    </head>
+    <body class="m-0 w-[360px] overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-red-950 text-white">
+        <div class="p-3">
+            <div class="rounded-3xl border border-white/10 bg-white/10 p-4 shadow-2xl shadow-black/40 backdrop-blur">
+                <div class="mb-5 text-center">
+                    <p class="mb-2 text-[10px] font-semibold uppercase tracking-[0.3em] text-red-300">Chrome Extension</p>
+                    <h1 class="text-xl font-extrabold leading-tight text-white">Youtube Video Downloader and Cutter</h1>
+                    <p class="mt-2 text-xs text-slate-300">Drag the handles or type the clip time in minutes and seconds.</p>
+                </div>
+
+                <div id="video-container" class="space-y-4 rounded-2xl border border-white/10 bg-black/30 p-4">
+                    <div class="rounded-2xl border border-white/10 bg-white/5 p-3">
+                        <div class="flex items-center justify-between gap-3">
+                            <div>
+                                <h2 class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Desktop Helper</h2>
+                                <p id="helper-status" class="mt-1 text-sm font-semibold text-amber-300">Checking local helper...</p>
+                            </div>
+                            <button id="install-helper-button" type="button" class="rounded-2xl border border-white/10 bg-white/10 px-3 py-2 text-xs font-semibold text-white transition hover:bg-white/20">Install Helper</button>
+                        </div>
+                        <p class="mt-2 text-xs text-slate-400">The installer is downloaded locally. Run it once to enable video download and trimming on this PC.</p>
+                    </div>
+
+                    <div>
+                        <h2 class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Video Title</h2>
+                        <h3 id="video-title" class="mt-2 text-sm font-semibold leading-snug text-white">Loading current video...</h3>
+                    </div>
+
+                    <div id="video-timeline" class="space-y-2">
+                        <div class="flex items-center justify-between text-xs text-slate-400">
+                            <span id="current-start-label">00:00</span>
+                            <span>Preview Range</span>
+                            <span id="current-end-label">00:00</span>
+                        </div>
+                        <div id="timeline-bar" class="relative h-3 cursor-pointer overflow-visible rounded-full bg-white/15">
+                            <div id="timeline-selection" class="absolute h-full rounded-full bg-gradient-to-r from-red-400 to-red-600 shadow-lg shadow-red-900/40"></div>
+                            <button id="start-handle" type="button" class="absolute top-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white bg-red-400 shadow-md shadow-black/40"></button>
+                            <button id="end-handle" type="button" class="absolute top-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white bg-red-500 shadow-md shadow-black/40"></button>
+                        </div>
+                        <div class="flex items-center justify-between text-[11px] text-slate-400">
+                            <span>Total video</span>
+                            <span id="video-length-label">00:00</span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <label class="block">
+                            <span class="mb-2 block text-xs font-medium uppercase tracking-[0.2em] text-slate-400">Start Time</span>
+                            <input type="text" id="start-time" inputmode="numeric" class="h-11 w-full rounded-2xl border border-white/10 bg-white/10 px-4 text-sm text-white outline-none placeholder:text-slate-500 focus:border-red-400 focus:ring-2 focus:ring-red-500/30" placeholder="00:00">
+                        </label>
+                        <label class="block">
+                            <span class="mb-2 block text-xs font-medium uppercase tracking-[0.2em] text-slate-400">End Time</span>
+                            <input type="text" id="end-time" inputmode="numeric" class="h-11 w-full rounded-2xl border border-white/10 bg-white/10 px-4 text-sm text-white outline-none placeholder:text-slate-500 focus:border-red-400 focus:ring-2 focus:ring-red-500/30" placeholder="00:00">
+                        </label>
+                    </div>
+
+                    <div class="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-xs text-slate-300">
+                        Selected clip: <span id="selected-range-label" class="font-semibold text-white">00:00 - 00:00</span>
+                    </div>
+
+                    <div class="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-xs text-slate-300">
+                        Job progress: <span id="job-progress-label" class="font-semibold text-white">Idle</span>
+                    </div>
+
+                    <div class="rounded-2xl border border-white/10 bg-slate-950/40 px-4 py-3">
+                        <div class="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Recent Logs</div>
+                        <pre id="job-log-output" class="max-h-32 overflow-auto whitespace-pre-wrap break-words text-[11px] leading-5 text-slate-300">No job logs yet.</pre>
+                    </div>
+
+                    <p id="status-message" class="text-xs text-slate-400">Open a YouTube video tab to load the real duration automatically.</p>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <button id="download-clip-button" type="button" class="w-full rounded-2xl bg-red-500 px-4 py-3 text-sm font-semibold text-white transition hover:bg-red-400">Download Selected Clip</button>
+                        <button id="cancel-job-button" type="button" class="w-full rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-sm font-semibold text-white transition hover:bg-white/20 disabled:cursor-not-allowed disabled:opacity-50">Cancel Job</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="./scripts/popup.js"></script>
+    </body>
+</html>
